@@ -1,0 +1,207 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  FolderKanbanIcon,
+  HouseIcon,
+  SendIcon,
+  UserRoundIcon,
+} from "lucide-react";
+import { useLenis } from "lenis/react";
+
+import { ThemeToggle } from "@/components/theme-toggle";
+import { NAV_LINKS } from "@/lib/nav";
+import { cn } from "@/lib/utils";
+
+type SiteHeaderProps = {
+  className?: string;
+};
+
+const ICONS = {
+  home: HouseIcon,
+  projects: FolderKanbanIcon,
+  about: UserRoundIcon,
+  contact: SendIcon,
+} as const;
+
+const MIN_WIDTH = 560;
+const MAX_SCROLL = 1000;
+
+type HeaderLogoProps = {
+  className?: string;
+  size?: number;
+  onNavigate: (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => void;
+};
+
+function HeaderLogo({ className, size = 36, onNavigate }: HeaderLogoProps) {
+  return (
+    <Link
+      href="#inicio"
+      onClick={(event) => onNavigate(event, "#inicio")}
+      className={cn("relative shrink-0", className)}
+      style={{ width: size, height: size }}
+      aria-label="France Tech — início"
+    >
+      <Image
+        src="/logo.png"
+        alt=""
+        width={size}
+        height={size}
+        className="size-full object-contain"
+        priority
+      />
+    </Link>
+  );
+}
+
+/**
+ * Mobile: logo + theme no topo; links na barra inferior (como DC portfolio)
+ */
+export function SiteHeader({ className }: SiteHeaderProps) {
+  const navRef = useRef<HTMLElement>(null);
+  const [activeHref, setActiveHref] = useState("#inicio");
+  const lenis = useLenis();
+
+  const updateNav = (scrollY: number) => {
+    const nav = navRef.current;
+    if (!nav) return;
+
+    if (window.innerWidth < 768) {
+      nav.style.width = "100%";
+      nav.dataset.scrolling = scrollY > 0 ? "true" : "false";
+      return;
+    }
+
+    if (scrollY > 0) {
+      nav.dataset.scrolling = "true";
+      const progress = Math.min(scrollY / MAX_SCROLL, 1);
+      const eased = 1 - (1 - progress) ** 4;
+      const maxWidth = window.innerWidth * 0.8;
+      nav.style.width = `${maxWidth - (maxWidth - MIN_WIDTH) * eased}px`;
+    } else {
+      nav.dataset.scrolling = "false";
+      nav.style.width = "80%";
+    }
+  };
+
+  useLenis((instance) => {
+    updateNav(instance.scroll);
+  });
+
+  useEffect(() => {
+    updateNav(window.scrollY);
+    const onResize = () => updateNav(window.scrollY);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    const sections = NAV_LINKS.map((link) =>
+      document.getElementById(link.href.slice(1)),
+    ).filter((el): el is HTMLElement => Boolean(el));
+
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const id = entry.target.getAttribute("id");
+          if (id) setActiveHref(`#${id}`);
+        });
+      },
+      { threshold: 0.45 },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
+  const onNavClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    const target = document.getElementById(href.slice(1));
+    if (!target) return;
+
+    event.preventDefault();
+    const offset = window.innerWidth < 768 ? -72 : -24;
+    if (lenis) lenis.scrollTo(target, { offset });
+    else target.scrollIntoView({ behavior: "smooth" });
+    setActiveHref(href);
+  };
+
+  return (
+    <>
+      {/* Mobile: logo + theme no topo, com fade para o conteúdo não colidir */}
+      <header className="fixed top-0 right-0 left-0 z-40 flex items-center justify-between bg-linear-to-b from-background from-40% via-background/85 to-transparent px-4 pt-3 pb-10 md:hidden">
+        <HeaderLogo size={52} onNavigate={onNavClick} />
+        <ThemeToggle />
+      </header>
+
+      <nav
+        ref={navRef}
+        id="main-nav"
+        aria-label="Principal"
+        data-scrolling="false"
+        style={{ width: "80%" }}
+        className={cn(
+          "fixed bottom-0 left-1/2 z-40 -translate-x-1/2 border border-transparent backdrop-blur-xl transition-[background-color,border-color,border-radius] duration-300 ease-in-out md:top-6 md:bottom-auto md:rounded-full",
+          "max-md:w-full! max-md:rounded-t-2xl max-md:border-white/10 max-md:bg-card/80",
+          "data-[scrolling=true]:border-white/10 data-[scrolling=true]:bg-card/75 data-[scrolling=true]:md:rounded-full",
+          className,
+        )}
+      >
+        <div className="mx-auto flex items-center justify-center gap-4 p-3 md:gap-8">
+          <HeaderLogo
+            className="hidden md:block"
+            size={36}
+            onNavigate={onNavClick}
+          />
+
+          <ul className="flex w-full justify-between gap-4 md:flex-1 md:justify-center md:gap-12">
+            {NAV_LINKS.map((link) => {
+              const active = activeHref === link.href;
+              const Icon = ICONS[link.icon];
+
+              return (
+                <li key={link.href} className="flex-1 md:flex-none">
+                  <Link
+                    href={link.href}
+                    onClick={(event) => onNavClick(event, link.href)}
+                    className={cn(
+                      "group relative flex flex-col items-center gap-1 text-xs transition-colors md:text-base",
+                      active
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    <span
+                      aria-hidden
+                      className={cn(
+                        "absolute top-1/2 -left-6 hidden size-2 -translate-y-1/2 rounded-full bg-primary transition-all duration-300 md:block",
+                        active ? "scale-100 opacity-100" : "scale-0 opacity-0",
+                      )}
+                    />
+                    <span className="flex size-6 items-center justify-center md:hidden">
+                      <Icon className="size-5" />
+                    </span>
+                    <span>{link.label}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          <ThemeToggle className="hidden md:inline-flex" />
+        </div>
+      </nav>
+    </>
+  );
+}
