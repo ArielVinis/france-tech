@@ -19,7 +19,7 @@ export default function HomePage() {
   return (
     <SmoothScroll>
       <SiteHeader />
-      <main className="pb-20 md:pb-0">
+      <main>
         <Hero />
         <Solutions />
         <About />

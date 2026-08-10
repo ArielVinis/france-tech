@@ -36,7 +36,7 @@ export function Contact() {
         <div data-reveal>
           <Button
             nativeButton={false}
-            render={<Link href="mailto:contato@francetech.com" />}
+            render={<Link href="mailto:france.dev@outlook.com" />}
             size="lg"
           >
             Enviar email

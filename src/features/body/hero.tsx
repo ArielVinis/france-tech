@@ -91,7 +91,6 @@ export function Hero({ className }: HeroProps) {
     <section
       ref={rootRef}
       id="inicio"
-      data-snap-section=""
       className={cn(
         "relative flex min-h-svh items-center overflow-hidden pt-24 md:pt-24",
         className,

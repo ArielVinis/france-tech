@@ -113,7 +113,6 @@ export function SectionReveal({
     <section
       ref={rootRef}
       id={id}
-      data-snap-section=""
       className={cn("relative min-h-svh scroll-mt-0", className)}
     >
       {children}

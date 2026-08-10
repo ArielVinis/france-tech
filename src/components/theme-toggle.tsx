@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
+import { useIsClient } from "@/hooks/use-is-client";
 import { cn } from "@/lib/utils";
 
 type ThemeToggleProps = {
@@ -13,13 +13,9 @@ type ThemeToggleProps = {
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useIsClient();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const isDark = resolvedTheme === "dark";
+  const isDark = !mounted || resolvedTheme === "dark";
 
   return (
     <Button
@@ -31,7 +27,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
       disabled={!mounted}
     >
-      {mounted && isDark ? <MoonIcon /> : <SunIcon />}
+      {isDark ? <MoonIcon /> : <SunIcon />}
     </Button>
   );
 }

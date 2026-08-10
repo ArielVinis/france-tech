@@ -6,8 +6,6 @@ import type { LenisRef } from "lenis/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { SectionSnap } from "@/features/body/section-snap";
-
 import "lenis/dist/lenis.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -63,7 +61,6 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
       }}
     >
       <ScrollTriggerBridge />
-      <SectionSnap />
       {children}
     </ReactLenis>
   );

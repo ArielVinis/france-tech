@@ -3,12 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  FolderKanbanIcon,
-  HouseIcon,
-  SendIcon,
-  UserRoundIcon,
-} from "lucide-react";
 import { useLenis } from "lenis/react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -18,13 +12,6 @@ import { cn } from "@/lib/utils";
 type SiteHeaderProps = {
   className?: string;
 };
-
-const ICONS = {
-  home: HouseIcon,
-  projects: FolderKanbanIcon,
-  about: UserRoundIcon,
-  contact: SendIcon,
-} as const;
 
 const MIN_WIDTH = 560;
 const MAX_SCROLL = 1000;
@@ -59,9 +46,6 @@ function HeaderLogo({ className, size = 36, onNavigate }: HeaderLogoProps) {
   );
 }
 
-/**
- * Mobile: logo + theme no topo; links na barra inferior (como DC portfolio)
- */
 export function SiteHeader({ className }: SiteHeaderProps) {
   const navRef = useRef<HTMLElement>(null);
   const [activeHref, setActiveHref] = useState("#inicio");
@@ -137,71 +121,55 @@ export function SiteHeader({ className }: SiteHeaderProps) {
   };
 
   return (
-    <>
-      {/* Mobile: logo + theme no topo, com fade para o conteúdo não colidir */}
-      <header className="fixed top-0 right-0 left-0 z-40 flex items-center justify-between bg-linear-to-b from-background from-40% via-background/85 to-transparent px-4 pt-3 pb-10 md:hidden">
-        <HeaderLogo size={52} onNavigate={onNavClick} />
-        <ThemeToggle />
-      </header>
+    <nav
+      ref={navRef}
+      id="main-nav"
+      aria-label="Principal"
+      data-scrolling="false"
+      style={{ width: "80%" }}
+      className={cn(
+        "fixed top-0 left-1/2 z-40 -translate-x-1/2 border border-transparent rounded-full backdrop-blur-xl transition-[background-color,border-color,border-radius] duration-300 ease-in-out md:top-6",
+        "max-md:w-full! max-md:bg-linear-to-b max-md:from-background max-md:from-50% max-md:via-background/90 max-md:to-transparent",
+        "data-[scrolling=true]:border-white/10 data-[scrolling=true]:bg-card/75 data-[scrolling=true]:md:rounded-full",
+        className,
+      )}
+    >
+      <div className="mx-auto flex items-center gap-3 px-4 py-3 md:gap-8 md:p-3">
+        <HeaderLogo className="md:size-9" size={44} onNavigate={onNavClick} />
 
-      <nav
-        ref={navRef}
-        id="main-nav"
-        aria-label="Principal"
-        data-scrolling="false"
-        style={{ width: "80%" }}
-        className={cn(
-          "fixed bottom-0 left-1/2 z-40 -translate-x-1/2 border border-transparent backdrop-blur-xl transition-[background-color,border-color,border-radius] duration-300 ease-in-out md:top-6 md:bottom-auto md:rounded-full",
-          "max-md:w-full! max-md:rounded-t-2xl max-md:border-white/10 max-md:bg-card/80",
-          "data-[scrolling=true]:border-white/10 data-[scrolling=true]:bg-card/75 data-[scrolling=true]:md:rounded-full",
-          className,
-        )}
-      >
-        <div className="mx-auto flex items-center justify-center gap-4 p-3 md:gap-8">
-          <HeaderLogo
-            className="hidden md:block"
-            size={36}
-            onNavigate={onNavClick}
-          />
+        <ul className="flex flex-1 items-center justify-center gap-3 sm:gap-5 md:gap-12">
+          {NAV_LINKS.map((link) => {
+            const active = activeHref === link.href;
 
-          <ul className="flex w-full justify-between gap-4 md:flex-1 md:justify-center md:gap-12">
-            {NAV_LINKS.map((link) => {
-              const active = activeHref === link.href;
-              const Icon = ICONS[link.icon];
-
-              return (
-                <li key={link.href} className="flex-1 md:flex-none">
-                  <Link
-                    href={link.href}
-                    onClick={(event) => onNavClick(event, link.href)}
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  onClick={(event) => onNavClick(event, link.href)}
+                  className={cn(
+                    "group relative text-xs transition-colors sm:text-sm md:text-base",
+                    active
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                  aria-current={active ? "page" : undefined}
+                >
+                  <span
+                    aria-hidden
                     className={cn(
-                      "group relative flex flex-col items-center gap-1 text-xs transition-colors md:text-base",
-                      active
-                        ? "text-foreground"
-                        : "text-muted-foreground hover:text-foreground",
+                      "absolute top-1/2 -left-4 hidden size-2 -translate-y-1/2 rounded-full bg-primary transition-all duration-300 md:block",
+                      active ? "scale-100 opacity-100" : "scale-0 opacity-0",
                     )}
-                    aria-current={active ? "page" : undefined}
-                  >
-                    <span
-                      aria-hidden
-                      className={cn(
-                        "absolute top-1/2 -left-6 hidden size-2 -translate-y-1/2 rounded-full bg-primary transition-all duration-300 md:block",
-                        active ? "scale-100 opacity-100" : "scale-0 opacity-0",
-                      )}
-                    />
-                    <span className="flex size-6 items-center justify-center md:hidden">
-                      <Icon className="size-5" />
-                    </span>
-                    <span>{link.label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+                  />
+                  <span>{link.label}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
 
-          <ThemeToggle className="hidden md:inline-flex" />
-        </div>
-      </nav>
-    </>
+        <ThemeToggle />
+      </div>
+    </nav>
   );
 }
