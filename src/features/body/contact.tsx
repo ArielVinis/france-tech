@@ -8,11 +8,7 @@ import { SectionReveal } from "@/features/body/section-reveal";
 
 export function Contact() {
   return (
-    <SectionReveal
-      id="contato"
-      pin
-      className="border-t border-border/40 bg-card/30"
-    >
+    <SectionReveal id="contato" className="border-t border-border/40 bg-card/30">
       <div className="mx-auto flex min-h-svh max-w-6xl flex-col justify-center gap-8 px-6 py-28 md:px-8 md:py-36">
         <p
           data-reveal

@@ -7,7 +7,7 @@ Site institucional da **France Tech** — soluções de software sob medida (web
 - **Next.js** 16 (App Router) + React 19
 - **Tailwind CSS** 4 + **shadcn/ui** (Base UI)
 - **GSAP** + **Lenis** (scroll e animações)
-- **React Bits** (via registry `@react-bits`)
+- **React Bits** (SplashCursor, ScrollStack, SplitText; ShinyText/TrueFocus em CSS)
 - **next-themes** (claro / escuro)
 - **TypeScript** + **pnpm**
 

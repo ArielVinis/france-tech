@@ -5,7 +5,7 @@ import { useBrandMetallic } from "@/hooks/use-brand-metallic";
 import { BRAND_METALLIC } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 
-/** Fluido do cursor — no light usa multiply para o dye escurecer o fundo */
+/** Fluido do cursor — desktop e mobile */
 export function SiteSplashCursor() {
   const brand = useBrandMetallic();
   const isLight = brand.splash === BRAND_METALLIC.light.splash;

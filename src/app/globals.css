@@ -120,6 +120,16 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --animate-shiny-text: shiny-text var(--shiny-duration, 4.8s) linear infinite;
+}
+
+@keyframes shiny-text {
+  0% {
+    background-position: 150% center;
+  }
+  100% {
+    background-position: -50% center;
+  }
 }
 
 @layer base {
@@ -143,5 +153,46 @@
   /* Lenis controla o scroll — CSS smooth conflita e deixa o gesto "duro" */
   html.lenis {
     scroll-behavior: auto !important;
+  }
+}
+
+/* Material estilo iOS (UIVisualEffect / frosted glass) */
+@layer utilities {
+  .glass-ios {
+    border: 0.5px solid rgb(255 255 255 / 0.45);
+    background: rgb(255 255 255 / 0.55);
+    box-shadow:
+      0 8px 30px rgb(0 0 0 / 0.08),
+      inset 0 0.5px 0 rgb(255 255 255 / 0.7),
+      inset 0 -0.5px 0 rgb(0 0 0 / 0.04);
+    -webkit-backdrop-filter: saturate(180%) blur(28px);
+    backdrop-filter: saturate(180%) blur(28px);
+  }
+
+  .dark .glass-ios {
+    border-color: rgb(255 255 255 / 0.14);
+    background: rgb(30 30 30 / 0.52);
+    box-shadow:
+      0 10px 36px rgb(0 0 0 / 0.35),
+      inset 0 0.5px 0 rgb(255 255 255 / 0.18),
+      inset 0 -0.5px 0 rgb(0 0 0 / 0.25);
+  }
+
+  .glass-ios[data-scrolling="true"] {
+    background: rgb(255 255 255 / 0.68);
+  }
+
+  .dark .glass-ios[data-scrolling="true"] {
+    background: rgb(30 30 30 / 0.68);
+  }
+
+  @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .glass-ios {
+      background: rgb(255 255 255 / 0.92);
+    }
+
+    .dark .glass-ios {
+      background: rgb(24 24 24 / 0.94);
+    }
   }
 }

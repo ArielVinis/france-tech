@@ -54,6 +54,7 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
         smoothWheel: true,
         wheelMultiplier: 0.85,
         touchMultiplier: 1.1,
+        syncTouch: false,
         anchors: { offset: -88 },
         autoRaf: false,
         // Windows muitas vezes tem reduced-motion → Lenis forçaria scroll 1:1 (duro).
