@@ -3,28 +3,30 @@
 import SplitText from "@/components/SplitText";
 import TrueFocus from "@/components/TrueFocus";
 import { SectionReveal } from "@/features/body/section-reveal";
+import { franceTech } from "@/data/france-tech";
 import { useBrandMetallic } from "@/hooks/use-brand-metallic";
 
 export function About() {
   const brand = useBrandMetallic();
+  const { about } = franceTech;
 
   return (
     <SectionReveal id="sobre" className="border-t border-border/40">
-      <div className="mx-auto flex min-h-svh max-w-6xl flex-col justify-center gap-8 px-6 py-28 md:px-8 md:py-36">
+      <div className="mx-auto flex min-h-[70svh] max-w-6xl flex-col justify-center gap-8 px-6 py-28 md:px-8 md:py-36">
         <p
           data-reveal
           className="font-heading text-xs font-semibold tracking-[0.22em] text-primary uppercase"
         >
-          Sobre
+          {about.eyebrow}
         </p>
 
         <div data-reveal>
           <SplitText
-            text="Tecnologia que impulsiona o futuro dos negócios."
+            text={about.title}
             tag="h2"
             splitType="words"
             textAlign="left"
-            className="max-w-3xl font-heading text-3xl leading-tight font-semibold tracking-tight text-foreground md:text-5xl"
+            className="max-w-3xl font-heading text-3xl leading-tight font-semibold tracking-[-0.03em] text-foreground md:text-5xl"
             delay={35}
             duration={0.85}
             threshold={0.15}
@@ -35,11 +37,7 @@ export function About() {
           data-reveal
           className="max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg"
         >
-          A France Tech desenvolve sistemas e soluções digitais personalizadas —
-          aplicações web, plataformas SaaS e sites institucionais — com foco em
-          desempenho, segurança e experiência do utilizador. Cada projeto nasce
-          das necessidades reais do cliente e é desenhado para escalar com o
-          negócio.
+          {about.body}
         </p>
 
         <div
@@ -51,8 +49,7 @@ export function About() {
               Missão
             </h3>
             <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
-              Desenvolver soluções digitais eficientes e personalizadas que
-              ajudem empresas a crescer com tecnologia.
+              {about.mission}
             </p>
           </div>
           <div className="flex flex-col gap-3">
@@ -60,8 +57,7 @@ export function About() {
               Visão
             </h3>
             <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
-              Ser referência em sistemas e plataformas digitais pela qualidade,
-              inovação e fiabilidade das soluções.
+              {about.vision}
             </p>
           </div>
         </div>
@@ -71,7 +67,7 @@ export function About() {
             Valores
           </h3>
           <TrueFocus
-            sentence="Resultados Qualidade Inovação Transparência Escala"
+            sentence={about.values}
             separator=" "
             blurAmount={4}
             borderColor={brand.silver}

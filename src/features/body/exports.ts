@@ -1,0 +1,10 @@
+export { About } from "@/features/body/about";
+export { Contact } from "@/features/body/contact";
+export { Essence } from "@/features/body/essence";
+export { SiteFooter } from "@/features/body/footer";
+export { FranceTechPage } from "@/features/body/france-tech-page";
+export { Hero } from "@/features/body/hero";
+export { SiteHeader } from "@/features/body/site-header";
+export { SmoothScroll } from "@/features/body/smooth-scroll";
+export { Solutions } from "@/features/body/solutions";
+export { Technology } from "@/features/body/technology";
