@@ -9,8 +9,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
 import ShinyText from "@/components/ShinyText";
-import SplitText from "@/components/SplitText";
 import { Button } from "@/components/ui/button";
+import { franceTech } from "@/data/france-tech";
 import { useBrandMetallic } from "@/hooks/use-brand-metallic";
 import { cn } from "@/lib/utils";
 
@@ -29,49 +29,43 @@ export function Hero({ className }: HeroProps) {
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set([".hero-copy > *", ".hero-visual"], { clearProps: "all" });
+        gsap.set([".hero-lead", ".hero-support", ".hero-visual"], {
+          clearProps: "all",
+        });
       });
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        const tl = gsap.timeline({
+          defaults: { ease: "power3.out" },
+        });
 
-        tl.from(".hero-copy > *", {
+        tl.from(".hero-visual", {
           opacity: 0,
-          y: 36,
-          duration: 1,
-          stagger: 0.12,
-        }).from(
-          ".hero-visual",
-          {
-            opacity: 0,
-            scale: 0.92,
-            duration: 1.15,
-            ease: "power2.out",
-          },
-          "-=0.6",
-        );
-
-        gsap.to(".hero-logo", {
-          y: -14,
-          rotation: 1.5,
-          duration: 3.6,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-        });
-
-        gsap.to(".hero-glow", {
-          opacity: 0.55,
-          scale: 1.08,
-          duration: 3.2,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-        });
+          scale: 0.94,
+          duration: 1.1,
+        })
+          .from(
+            ".hero-lead",
+            {
+              opacity: 0,
+              y: 28,
+              duration: 0.85,
+            },
+            "-=0.75",
+          )
+          .from(
+            ".hero-support",
+            {
+              opacity: 0,
+              y: 16,
+              duration: 0.7,
+              stagger: 0.08,
+            },
+            "-=0.55",
+          );
 
         gsap.to(".hero-parallax", {
-          yPercent: 18,
-          opacity: 0.35,
+          yPercent: 12,
           ease: "none",
           scrollTrigger: {
             trigger: rootRef.current,
@@ -91,45 +85,45 @@ export function Hero({ className }: HeroProps) {
     <section
       ref={rootRef}
       id="inicio"
+      aria-labelledby="hero-title"
       className={cn(
-        "relative flex min-h-svh items-center overflow-hidden pt-24 md:pt-24",
+        "relative flex min-h-svh items-center overflow-hidden brand-pattern",
         className,
       )}
     >
-      <div className="hero-parallax relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 px-6 py-16 md:grid-cols-2 md:gap-10 md:px-8 md:py-20 lg:gap-16">
-        <div className="hero-copy flex flex-col gap-6 md:gap-7">
-          <p className="font-heading text-4xl leading-none font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_70%_40%,rgb(192_192_192/0.12),transparent_55%)]"
+      />
+
+      <div className="hero-parallax relative z-10 mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-28 md:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] md:gap-8 md:px-8 md:py-32 lg:gap-12">
+        <div className="flex flex-col gap-6 md:gap-7">
+          <p className="hero-lead font-heading text-[clamp(2.5rem,7vw,4.25rem)] leading-[0.95] font-semibold tracking-[-0.04em]">
             <ShinyText
-              text="France Tech"
+              text={franceTech.name}
               color={brand.silver}
               shineColor={brand.shine}
-              speed={2.4}
-              spread={110}
-              className="font-heading text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
+              speed={2.6}
+              spread={120}
+              className="font-heading text-[clamp(2.5rem,7vw,4.25rem)] font-semibold tracking-[-0.04em]"
             />
           </p>
 
-          <SplitText
-            text="Tecnologia que impulsiona o futuro dos negócios."
-            tag="h1"
-            splitType="words"
-            textAlign="left"
-            className="max-w-xl font-heading text-2xl leading-tight font-medium tracking-tight text-primary sm:text-3xl lg:text-[2.15rem]"
-            delay={40}
-            duration={0.9}
-            threshold={0.2}
-            rootMargin="-40px"
-          />
+          <h1
+            id="hero-title"
+            className="hero-support max-w-xl font-heading text-[clamp(1.35rem,3.2vw,2rem)] leading-[1.15] font-medium tracking-[-0.02em] text-foreground"
+          >
+            {franceTech.tagline}
+          </h1>
 
-          <p className="max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Soluções de software sob medida para empresas que buscam inovação,
-            performance e crescimento sustentável.
+          <p className="hero-support max-w-md text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+            {franceTech.lead}
           </p>
 
-          <div className="flex flex-wrap items-center gap-3 pt-1">
+          <div className="hero-support flex flex-wrap items-center gap-3 pt-1">
             <Button
               nativeButton={false}
-              render={<Link href="#contato" />}
+              render={<Link href="#contato" className="ft-press" />}
               size="lg"
             >
               Falar conosco
@@ -137,7 +131,7 @@ export function Hero({ className }: HeroProps) {
             </Button>
             <Button
               nativeButton={false}
-              render={<Link href="#solucoes" />}
+              render={<Link href="#solucoes" className="ft-press" />}
               variant="outline"
               size="lg"
             >
@@ -146,15 +140,18 @@ export function Hero({ className }: HeroProps) {
           </div>
         </div>
 
-        <div className="hero-visual relative mx-auto flex w-full max-w-md items-center justify-center md:max-w-none">
-          <div className="hero-glow absolute size-[70%] rounded-full bg-primary/15 blur-3xl" />
+        <div className="hero-visual relative mx-auto flex w-full max-w-lg items-center justify-center md:max-w-none">
+          <div
+            aria-hidden
+            className="absolute size-[78%] rounded-full bg-primary/10 blur-3xl"
+          />
           <Image
             src="/logo.png"
             alt="Logo France Tech — Torre Eiffel metálica"
-            width={640}
-            height={640}
+            width={720}
+            height={720}
             priority
-            className="hero-logo relative z-10 w-full max-w-88 object-contain drop-shadow-[0_30px_60px_rgba(192,192,192,0.18)] sm:max-w-104 lg:max-w-120"
+            className="relative z-10 w-full max-w-[22rem] object-contain drop-shadow-[0_40px_80px_rgba(192,192,192,0.22)] sm:max-w-[26rem] lg:max-w-[30rem]"
           />
         </div>
       </div>

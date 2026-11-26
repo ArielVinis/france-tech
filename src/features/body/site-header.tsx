@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useLenis } from "lenis/react";
 
 import { ThemeToggle } from "@/components/theme-toggle";
-import { NAV_LINKS } from "@/lib/nav";
+import { NAV_LINKS, NAV_SECTIONS } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 
 type SiteHeaderProps = {
@@ -85,7 +85,7 @@ export function SiteHeader({ className }: SiteHeaderProps) {
   }, []);
 
   useEffect(() => {
-    const sections = NAV_LINKS.map((link) =>
+    const sections = NAV_SECTIONS.map((link) =>
       document.getElementById(link.href.slice(1)),
     ).filter((el): el is HTMLElement => Boolean(el));
 
@@ -128,7 +128,7 @@ export function SiteHeader({ className }: SiteHeaderProps) {
       data-scrolling="false"
       style={{ width: "80%" }}
       className={cn(
-        "fixed top-0 left-1/2 z-40 -translate-x-1/2 border border-transparent rounded-full backdrop-blur-xl transition-[background-color,border-color,border-radius] duration-300 ease-in-out md:top-6",
+        "fixed top-0 left-1/2 z-40 -translate-x-1/2 rounded-full border border-transparent backdrop-blur-xl transition-[background-color,border-color,border-radius] duration-300 ease-in-out md:top-6",
         "max-md:w-full! max-md:bg-linear-to-b max-md:from-background max-md:from-50% max-md:via-background/90 max-md:to-transparent",
         "data-[scrolling=true]:border-white/10 data-[scrolling=true]:bg-card/75 data-[scrolling=true]:md:rounded-full",
         className,

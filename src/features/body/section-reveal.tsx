@@ -1,41 +1,42 @@
-"use client"
+"use client";
 
-import { useRef } from "react"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { useGSAP } from "@gsap/react"
+import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP)
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type SectionRevealProps = {
-  children: React.ReactNode
-  className?: string
-  id?: string
-  /** Pin leve + scrub (desktop) para transição tipo studio */
-  pin?: boolean
-}
+  children: React.ReactNode;
+  className?: string;
+  id?: string;
+  pin?: boolean;
+  "aria-labelledby"?: string;
+};
 
 export function SectionReveal({
   children,
   className,
   id,
   pin = false,
+  "aria-labelledby": ariaLabelledBy,
 }: SectionRevealProps) {
-  const rootRef = useRef<HTMLElement>(null)
+  const rootRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
-      const root = rootRef.current
-      if (!root) return
+      const root = rootRef.current;
+      if (!root) return;
 
-      const items = root.querySelectorAll("[data-reveal]")
-      const mm = gsap.matchMedia()
+      const items = root.querySelectorAll("[data-reveal]");
+      const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(items, { clearProps: "all" })
-      })
+        gsap.set(items, { clearProps: "all" });
+      });
 
       mm.add(
         "(prefers-reduced-motion: no-preference) and (min-width: 768px)",
@@ -57,9 +58,9 @@ export function SectionReveal({
                   scrub: 0.85,
                   anticipatePin: 1,
                 },
-              }
-            )
-            return
+              },
+            );
+            return;
           }
 
           gsap.fromTo(
@@ -77,10 +78,10 @@ export function SectionReveal({
                 end: "top 40%",
                 toggleActions: "play none none reverse",
               },
-            }
-          )
-        }
-      )
+            },
+          );
+        },
+      );
 
       mm.add(
         "(prefers-reduced-motion: no-preference) and (max-width: 767px)",
@@ -99,23 +100,24 @@ export function SectionReveal({
                 start: "top 85%",
                 toggleActions: "play none none reverse",
               },
-            }
-          )
-        }
-      )
+            },
+          );
+        },
+      );
 
-      return () => mm.revert()
+      return () => mm.revert();
     },
-    { scope: rootRef, dependencies: [pin] }
-  )
+    { scope: rootRef, dependencies: [pin] },
+  );
 
   return (
     <section
       ref={rootRef}
       id={id}
-      className={cn("relative min-h-svh scroll-mt-0", className)}
+      aria-labelledby={ariaLabelledBy}
+      className={cn("relative scroll-mt-0", className)}
     >
       {children}
     </section>
-  )
+  );
 }

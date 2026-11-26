@@ -1,22 +1,5 @@
-import {
-  About,
-  Contact,
-  Hero,
-  SiteHeader,
-  SmoothScroll,
-  Solutions,
-} from "@/features";
+import { FranceTechPage } from "@/features";
 
 export default function HomePage() {
-  return (
-    <SmoothScroll>
-      <SiteHeader />
-      <main>
-        <Hero />
-        <Solutions />
-        <About />
-        <Contact />
-      </main>
-    </SmoothScroll>
-  );
+  return <FranceTechPage />;
 }
